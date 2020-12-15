@@ -1,13 +1,13 @@
 use rusqlite::{params, Connection, NO_PARAMS};
 
 struct Date{
-    year :usize,
-    month :usize,
-    day :usize
+    year :i64,
+    month :i64,
+    day :i64
 }
 
 struct TodoData{
-    id :usize,
+    id :i64,
     date :Date,
     detail :String
 }
@@ -16,7 +16,7 @@ struct DataBaseConnector{
     path : String
 }
 impl DataBaseConnector{
-    pub fn open(&self) -> Result<Connection,String>{
+    pub fn create_table(&self) -> Result<Connection,String>{
         let connection = Connection::open(&self.path);
         if connection.is_err(){
             return Err("Cannot Connect DataBase".to_string());
@@ -44,21 +44,55 @@ impl DataBaseConnector{
         Ok(manager)
     }
 
-    pub fn insert(&self, data: TodoData) -> Result<String,String>{
+    pub fn insert_data_of_do(&self, data: TodoData) -> Result<Connection,String>{
+        let connection = Connection::open(&self.path);
+        if connection.is_err(){
+            return Err("Cannot Connect DataBase".to_string());
+        }
 
+        let manager = connection.unwrap();
+        let insert_query = manager.execute(
+            "INSERT INTO list VALUES($1,$2,$3,$4,?5,?6)"
+                ,params![data.id, data.date.year, data.date.month, data.date.day, data.detail, "do".to_string()]
+        );
+        if insert_query.is_err(){
+            return Err("Cannot insert data of 'do'".to_string());
+        }
+
+        Ok(manager)
     }
 }
 
 #[cfg(test)]
 mod test{
-    use crate::model::DataBaseConnector;
+    use crate::model::{DataBaseConnector, TodoData, Date};
 
     #[test]
     fn test_connect_database(){
         let connection_base = DataBaseConnector{ path: String::from("./test_db.db3") };
-        let connector = connection_base.open();
+        let connector = connection_base.create_table();
         match connector{
-            Ok(con) => {con.close();}
+            Ok(con) => {
+                con.close();
+                println!("successful");
+            }
+            Err(word) => {println!("{}",word)}
+        }
+    }
+
+    #[test]
+    fn test_insert_database(){
+        let connection_base = DataBaseConnector{ path: String::from("./test_db.db3") };
+        connection_base.create_table();
+        let sample_date = Date{year: 2020, month: 11, day: 5};
+        let sample_data_of_do = TodoData{id: 1, date: sample_date, detail: "study with friends".to_string()};
+
+        let result = connection_base.insert_data_of_do(sample_data_of_do);
+        match result{
+            Ok(con) => {
+                con.close();
+                println!("successful");
+            }
             Err(word) => {println!("{}",word)}
         }
     }
