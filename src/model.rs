@@ -61,6 +61,24 @@ impl DataBaseConnector{
 
         Ok(manager)
     }
+
+    pub fn update_data(&self, id: i64, flag: String) -> Result<Connection,String>{
+        let connection = Connection::open(&self.path);
+        if connection.is_err(){
+            return Err("Cannot Connect DataBase".to_string());
+        }
+
+        let manager = connection.unwrap();
+        let update_query = manager.execute("UPDATE list set flag=?1 where id=$2 "
+            ,params![flag, id]
+        );
+
+        if update_query.is_err(){
+            return Err("Cannot insert data".to_string());
+        }
+
+        Ok(manager)
+    }
 }
 
 #[cfg(test)]
@@ -88,6 +106,24 @@ mod test{
         let sample_data_of_do = TodoData{id: 1, date: sample_date, detail: "study with friends".to_string()};
 
         let result = connection_base.insert_data_of_do(sample_data_of_do);
+        match result{
+            Ok(con) => {
+                con.close();
+                println!("successful");
+            }
+            Err(word) => {println!("{}",word)}
+        }
+    }
+
+    #[test]
+    fn test_update_database(){
+        let connection_base = DataBaseConnector{ path: String::from("./test_db.db3") };
+        connection_base.create_table();
+        let sample_date = Date{year: 2020, month: 11, day: 5};
+        let sample_data_of_do = TodoData{id: 1, date: sample_date, detail: "study with friends".to_string()};
+        connection_base.insert_data_of_do(sample_data_of_do);
+
+        let result = connection_base.update_data(1,"done".to_string());
         match result{
             Ok(con) => {
                 con.close();
