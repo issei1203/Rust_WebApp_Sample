@@ -1,4 +1,4 @@
-use rusqlite::{params, Connection, NO_PARAMS};
+use rusqlite::{params, Connection};
 
 struct Date{
     year :i64,
@@ -6,14 +6,14 @@ struct Date{
     day :i64
 }
 
-struct TodoData{
+ pub struct TodoData{
     id :i64,
     date :Date,
     detail :String
 }
 
-struct DataBaseConnector{
-    path : String
+pub struct DataBaseConnector{
+    pub path : String
 }
 impl DataBaseConnector{
     pub fn create_table(&self) -> Result<Connection,String>{
@@ -80,6 +80,7 @@ impl DataBaseConnector{
         Ok(manager)
     }
 }
+
 
 #[cfg(test)]
 mod test{
