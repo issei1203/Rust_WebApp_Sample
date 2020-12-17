@@ -1,12 +1,13 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 
 mod model;
+mod todo_type;
 
 #[macro_use] extern crate rocket;
 
-use crate::model::DataBaseConnector;
 use rocket_contrib::templates::Template;
 use std::collections::HashMap;
+use crate::model::DataBaseConnector;
 
 #[get("/")]
 fn hello() -> &'static str{
@@ -15,8 +16,7 @@ fn hello() -> &'static str{
 
 #[get("/index")]
 fn index() -> Template{
-    let mut context = HashMap::new();
-    context.insert("name","issei");
+    let mut context:HashMap<String,String> = HashMap::new();
     Template::render("index",context)
 }
 

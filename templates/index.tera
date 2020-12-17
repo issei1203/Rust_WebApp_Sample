@@ -1,1 +1,21 @@
-<p>Hi {{name}}</p>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Todoリスト</title>
+</head>
+<body>
+<p>Do</p>
+    <ul>
+        <li></li>
+    </ul>
+<p>Doing</p>
+    <ul>
+        <li></li>
+    </ul>
+<p>Done</p>
+    <ul>
+        <li></li>
+    </ul>
+</body>
+</html>
