@@ -98,7 +98,7 @@ impl DataBaseConnector{
 
         let raw_select_query = format!("{}{}","select id,year,month,day,detail From list WHERE flag = ", flag);
 
-        let mut select_query = manage.prepare(raw_select_query.as_str());
+        let select_query = manage.prepare(raw_select_query.as_str());
         if select_query.is_err(){
             return Err("Cannot select query".to_string());
         }
@@ -147,7 +147,7 @@ impl DataBaseConnector{
 
         let raw_select_query = format!("{}{}","select id,year,month,day,detail From list WHERE flag = ", flag);
 
-        let mut select_query = manage.prepare(raw_select_query.as_str());
+        let select_query = manage.prepare(raw_select_query.as_str());
         if select_query.is_err(){
             return Err("Cannot select query".to_string());
         }

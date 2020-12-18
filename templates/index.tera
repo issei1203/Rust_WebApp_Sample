@@ -22,7 +22,7 @@
 {% for row in done %}
     <li>{{row.detail}}</li>
 {%endfor%}
-<form>
+<form method="POST" action="/regist">
     <ul>
         <li>ID<input type = "string" name = "id"></li>
         <li>年<input type = "string" name = "year"></li>
