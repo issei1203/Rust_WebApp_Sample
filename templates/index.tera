@@ -5,17 +5,33 @@
     <title>Todoリスト</title>
 </head>
 <body>
-<p>Do</p>
+<p>do</p>
+<ul>
+{% for row in do %}
+    <li>{{row.detail}}</li>
+{%endfor%}
+</ul>
+<p>doing</p>
+<ul>
+{% for row in doing %}
+    <li>{{row.detail}}</li>
+{%endfor%}
+</ul>
+<p>done</p>
+<ul>
+{% for row in done %}
+    <li>{{row.detail}}</li>
+{%endfor%}
+<form>
     <ul>
-        <li></li>
+        <li>ID<input type = "string" name = "id"></li>
+        <li>年<input type = "string" name = "year"></li>
+        <li>月<input type = "string" name = "month"></li>
+        <li>日<input type = "string" name = "day"></li>
+        <li>内容<input type = "string" name = "detail"></li>
+        <li><input type = "submit"></li>
     </ul>
-<p>Doing</p>
-    <ul>
-        <li></li>
-    </ul>
-<p>Done</p>
-    <ul>
-        <li></li>
-    </ul>
+</form>
+</ul>
 </body>
 </html>
