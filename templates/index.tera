@@ -10,8 +10,8 @@
 {% for row in do %}
     <li>{{row.detail}}</li>
     <form method="POST" action="/update">
-    <input type="hide" name="id" value={{row.id}}>
-    <input type="hide" name="flag" value="doing">
+    <input type="hidden" name="id" value={{row.id}}>
+    <input type="hidden" name="flag" value="doing">
     <input type="submit">
     </form>
 {%endfor%}
@@ -21,8 +21,8 @@
 {% for row in doing %}
     <li>{{row.detail}}</li>
     <form method="POST" action="/update">
-        <input type="hide" name="id" value={{row.id}}>
-        <input type="hide" name="flag" value="done">
+        <input type="hidden" name="id" value={{row.id}}>
+        <input type="hidden" name="flag" value="done">
         <input type="submit">
     </form>
 {%endfor%}
@@ -32,8 +32,8 @@
 {% for row in done %}
     <li>{{row.detail}}</li>
     <form method="POST" action="/delete">
-        <input type="hide" name="id" value={{row.id}}>
-        <input type="hide" name="flag" value="delete">
+        <input type="hidden" name="id" value={{row.id}}>
+        <input type="hidden" name="flag" value="delete">
         <input type="submit">
     </form>
 {%endfor%}
