@@ -178,6 +178,23 @@ impl DataBaseConnector{
         Ok(index_vec)
 
     }
+
+    pub fn delete_data(&self, id: i64) -> Result<Connection,String>{
+        let connection = Connection::open(&self.path);
+        if connection.is_err(){
+            return Err("Cannot Connect DataBase".to_string());
+        }
+        let manager = connection.unwrap();
+        let delete_query = manager.execute(
+            "DELETE FROM list WHERE id = $1"
+            ,params![id]
+        );
+        if delete_query.is_err(){
+            return Err("Cannot insert data of 'do'".to_string());
+        }
+
+        Ok(manager)
+    }
 }
 
 
@@ -279,6 +296,32 @@ mod test{
         match result_vec{
             Ok(con) => {
                 assert_eq!(con.len(),3)
+            }
+            Err(word) => {println!("{}",word)}
+        }
+    }
+    #[test]
+    fn test_delete_data_database(){
+        let connection_base = DataBaseConnector{ path: String::from("./test_db.db3") };
+        connection_base.create_table();
+        let sample_date = Date{year: 2020, month: 11, day: 5};
+        let sample_data_of_do = TodoData{id: 1, date: sample_date, detail: "study with friends".to_string()};
+        connection_base.insert_data_of_do(sample_data_of_do);
+
+        let result_vec = connection_base.get_vector_data_of_todo_type(TodoDataType::Do);
+        match result_vec{
+            Ok(con) => {
+                assert_eq!(con.len(),1)
+            }
+            Err(word) => {println!("{}",word)}
+        }
+
+        connection_base.delete_data(1);
+
+        let result_vec = connection_base.get_vector_data_of_todo_type(TodoDataType::Do);
+        match result_vec{
+            Ok(con) => {
+                assert_eq!(con.len(),0)
             }
             Err(word) => {println!("{}",word)}
         }

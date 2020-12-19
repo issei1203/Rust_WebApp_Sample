@@ -33,6 +33,7 @@
     <li>{{row.detail}}</li>
     <form method="POST" action="/delete">
         <input type="hide" name="id" value={{row.id}}>
+        <input type="hide" name="flag" value="delete">
         <input type="submit">
     </form>
 {%endfor%}

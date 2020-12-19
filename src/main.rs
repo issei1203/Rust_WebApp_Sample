@@ -84,6 +84,20 @@ fn update_todo(update_todo: Form<UpdateTodo>) -> Template{
     create_index_template(connection_base)
 }
 
+#[post("/delete", data="<delete_todo>")]
+fn delete_todo(delete_todo: Form<UpdateTodo>) -> Template{
+    let connection_base = DataBaseConnector{ path: String::from(DATABASE_PATH) };
+    let id ;
+    match  delete_todo.id.parse::<i64>(){
+        Ok(delete)=>{id = delete;}
+        Err(_)=>{return create_index_template(connection_base);}
+    }
+
+    connection_base.delete_data(id);
+
+    create_index_template(connection_base)
+}
+
 #[get("/index")]
 fn index() -> Template{
     let connection_base = DataBaseConnector{ path: String::from(DATABASE_PATH) };
@@ -133,7 +147,7 @@ fn main(){
     let sample_data_of_done = TodoData{id: 3, date: sample_date3, detail: "sleep with friends".to_string()};
     connection_base.insert_data_of_do(sample_data_of_done);
 
-    rocket::ignite().mount("/",routes![regist, hello, index, update_todo]).attach(Template::fairing()).launch();
+    rocket::ignite().mount("/",routes![regist, hello, index, update_todo, delete_todo]).attach(Template::fairing()).launch();
 }
 
 
