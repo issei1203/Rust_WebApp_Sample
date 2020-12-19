@@ -21,6 +21,11 @@ struct InputTodo {
     day: String,
     detail: String
 }
+#[derive(FromForm, Clone)]
+struct UpdateTodo{
+    id: String,
+    flag: String
+}
 
 #[get("/")]
 fn hello() -> &'static str{
@@ -29,7 +34,7 @@ fn hello() -> &'static str{
 
 #[post("/regist", data="<input_todo>")]
 fn regist(input_todo: Form<InputTodo>) -> Template{
-    let connection_base = DataBaseConnector{ path: String::from("./test_db.db3") };
+    let connection_base = DataBaseConnector{ path: String::from(DATABASE_PATH) };
 
     let id;
     let year;
@@ -58,6 +63,23 @@ fn regist(input_todo: Form<InputTodo>) -> Template{
 
     connection_base.insert_data_of_do(input_data);
 
+
+    create_index_template(connection_base)
+}
+
+#[post("/update", data="<update_todo>")]
+fn update_todo(update_todo: Form<UpdateTodo>) -> Template{
+    let connection_base = DataBaseConnector{ path: String::from(DATABASE_PATH) };
+    let id ;
+    let flag;
+    match  update_todo.id.parse::<i64>(){
+        Ok(update)=>{id = update;}
+        Err(_)=>{return create_index_template(connection_base);}
+    }
+
+    flag = update_todo.flag.clone();
+
+    connection_base.update_data(id, flag);
 
     create_index_template(connection_base)
 }
@@ -111,7 +133,7 @@ fn main(){
     let sample_data_of_done = TodoData{id: 3, date: sample_date3, detail: "sleep with friends".to_string()};
     connection_base.insert_data_of_do(sample_data_of_done);
 
-    rocket::ignite().mount("/",routes![regist, hello, index]).attach(Template::fairing()).launch();
+    rocket::ignite().mount("/",routes![regist, hello, index, update_todo]).attach(Template::fairing()).launch();
 }
 
 

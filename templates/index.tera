@@ -9,18 +9,32 @@
 <ul>
 {% for row in do %}
     <li>{{row.detail}}</li>
+    <form method="POST" action="/update">
+    <input type="hide" name="id" value={{row.id}}>
+    <input type="hide" name="flag" value="doing">
+    <input type="submit">
+    </form>
 {%endfor%}
 </ul>
 <p>doing</p>
 <ul>
 {% for row in doing %}
     <li>{{row.detail}}</li>
+    <form method="POST" action="/update">
+        <input type="hide" name="id" value={{row.id}}>
+        <input type="hide" name="flag" value="done">
+        <input type="submit">
+    </form>
 {%endfor%}
 </ul>
 <p>done</p>
 <ul>
 {% for row in done %}
     <li>{{row.detail}}</li>
+    <form method="POST" action="/delete">
+        <input type="hide" name="id" value={{row.id}}>
+        <input type="submit">
+    </form>
 {%endfor%}
 <form method="POST" action="/regist">
     <ul>
