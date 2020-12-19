@@ -6,6 +6,7 @@ mod todo_type;
 #[macro_use] extern crate rocket;
 
 use rocket_contrib::templates::Template;
+use rocket_contrib::serve::StaticFiles;
 use std::collections::HashMap;
 use crate::model::{DataBaseConnector, TodoData, Date};
 use crate::todo_type::TodoDataType;
@@ -147,7 +148,11 @@ fn main(){
     let sample_data_of_done = TodoData{id: 3, date: sample_date3, detail: "sleep with friends".to_string()};
     connection_base.insert_data_of_do(sample_data_of_done);
 
-    rocket::ignite().mount("/",routes![regist, hello, index, update_todo, delete_todo]).attach(Template::fairing()).launch();
+    rocket::ignite()
+        .mount("/static", StaticFiles::from("static"))
+        .mount("/",routes![regist, hello, index, update_todo, delete_todo])
+        .attach(Template::fairing())
+        .launch();
 }
 
 
