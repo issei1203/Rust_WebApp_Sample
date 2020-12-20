@@ -135,19 +135,6 @@ fn main(){
     let connection_base = DataBaseConnector{ path: String::from(DATABASE_PATH) };
     connection_base.create_table();
 
-    //サンプル挿入
-    let sample_date = Date{year: 2020, month: 11, day: 5};
-    let sample_data_of_do = TodoData{id: 1, date: sample_date, detail: "study with friends".to_string()};
-    connection_base.insert_data_of_do(sample_data_of_do);
-
-    let sample_date2 = Date{year: 2020, month: 11, day: 5};
-    let sample_data_of_doing = TodoData{id: 2, date: sample_date2, detail: "go to travel".to_string()};
-    connection_base.insert_data_of_do(sample_data_of_doing);
-
-    let sample_date3 = Date{year: 2020, month: 11, day: 5};
-    let sample_data_of_done = TodoData{id: 3, date: sample_date3, detail: "sleep with friends".to_string()};
-    connection_base.insert_data_of_do(sample_data_of_done);
-
     rocket::ignite()
         .mount("/static", StaticFiles::from("static"))
         .mount("/",routes![regist, hello, index, update_todo, delete_todo])
